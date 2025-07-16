@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 346651980}
   - component: {fileID: 346651981}
+  - component: {fileID: 346651982}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -189,6 +190,18 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 09f452e47f52488469640e4dd0207b0a, type: 3}
   - {fileID: 21300000, guid: efc34cb9ac02e4c458dbc2f62eab9886, type: 3}
   - {fileID: 21300000, guid: b1d59c0ff71631a4786d17e66fee106c, type: 3}
+--- !u!114 &346651982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346651979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 003015499cb5fe04ea8aef363af2fa7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +308,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

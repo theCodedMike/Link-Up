@@ -4,11 +4,11 @@ using Random = UnityEngine.Random;
 public class MapController : MonoBehaviour
 {
     public GameObject tilePrefab;
-    public int rowNum = 14;
-    public int colNum = 18;
+    public readonly static int rowNum = 14;
+    public readonly static int colNum = 18;
     public Sprite[] tiles; // 贴图数组
     private static int[,] tempMap; // 初始化偶数张牌以及被随机打乱的数组
-    private static int[,] testMap; // 储存被打乱后的tempMap以及在周围加上一圈0
+    public static int[,] testMap; // 储存被打乱后的tempMap以及在周围加上一圈0
     private static float xMove = 0.71f;
     private static float yMove = 0.71f;
 
