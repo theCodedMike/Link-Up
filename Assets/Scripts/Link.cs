@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Link : MonoBehaviour
 {
@@ -9,7 +11,11 @@ public class Link : MonoBehaviour
     private int _linkType; // 一折(0)、二折(1)或三折(2)
     private DrawLine _drawLine;
     private Vector3 _z1, _z2; // 折点位置
-
+    private bool _isStop = true;
+    
+    public GameObject upgradePrefab;
+    public float genUpgradeProbability; // 生成道具的概率
+    
     private void Start()
     {
         _mainCamera = Camera.main;
@@ -18,7 +24,7 @@ public class Link : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && _isStop)
         {
             IsSelect();
         }
@@ -34,9 +40,6 @@ public class Link : MonoBehaviour
 
             if (_select)
             {
-                if (tile == _tile1)
-                    return;
-
                 _tile2 = tile;
                 _tile1.GetComponent<SpriteRenderer>().color = Color.white;
                 _select = false;
@@ -58,7 +61,7 @@ public class Link : MonoBehaviour
         {
             IsLink(_tile1.x, _tile1.y, _tile2.x, _tile2.y);
         }
-        else
+        else // 2次点击同一个tile，或者2次点击不同的tile但是value不同
         {
             _tile1 = null;
             _tile2 = null;
@@ -106,6 +109,17 @@ public class Link : MonoBehaviour
     private IEnumerator DestroyTile(int x1, int y1, int x2, int y2)
     {
         _drawLine.DrawLinkLine(_tile1.gameObject, _tile2.gameObject, _linkType, _z1, _z2);
+        
+        //生成道具
+        if (Random.value < genUpgradeProbability)
+        {
+            GameObject upgradeObj = Instantiate(upgradePrefab, new Vector3(14.8f, 7, -1), Quaternion.identity);
+            Upgrade upgrade = upgradeObj.GetComponent<Upgrade>();
+            upgrade.SetParam();
+            print($"道具：{upgrade.upgradeName}");
+            PerformUpgrade(upgrade.upgradeName);
+        }
+        
         yield return new WaitForSeconds(0.2f);
         MapController.testMap[x1, y1] = MapController.empty;
         MapController.testMap[x2, y2] = MapController.empty;
@@ -235,5 +249,31 @@ public class Link : MonoBehaviour
         }
         
         return false;
+    }
+    
+    // 按道具类型执行相应的逻辑
+    private void PerformUpgrade(string upgradeName)
+    {
+        if (string.IsNullOrEmpty(upgradeName))
+            throw new ArgumentNullException(upgradeName);
+        
+        switch (upgradeName)
+        {
+            case "plus": break;
+            case "stop": IsStop(); break;
+            case "clock": break;
+        }
+    }
+
+    private void IsStop()
+    {
+        _isStop = false;
+        StartCoroutine(Timer());
+    }
+
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(10f); // 禁手10秒
+        _isStop = true;
     }
 }

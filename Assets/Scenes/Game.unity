@@ -201,6 +201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 003015499cb5fe04ea8aef363af2fa7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradePrefab: {fileID: 1713175103681326, guid: 68a2e5c69f500f84ca7549d490939803, type: 3}
+  genUpgradeProbability: 0.5
 --- !u!114 &346651983
 MonoBehaviour:
   m_ObjectHideFlags: 0
