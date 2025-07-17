@@ -4,14 +4,14 @@ using Random = UnityEngine.Random;
 public class MapController : MonoBehaviour
 {
     public GameObject tilePrefab;
-    public readonly static int rowNum = 14;
-    public readonly static int colNum = 18;
+    public static int rowNum = 14;
+    public static int colNum = 18;
     public Sprite[] tiles; // 贴图数组
     private static int[,] tempMap; // 初始化偶数张牌以及被随机打乱的数组
     public static int[,] testMap; // 储存被打乱后的tempMap以及在周围加上一圈0
-    private static float xMove = 0.71f;
-    private static float yMove = 0.71f;
-
+    public static float xMove = 0.71f;
+    public static float yMove = 0.71f;
+    public static int empty = -1;
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class MapController : MonoBehaviour
             {
                 if (i == 0 || j == 0 || i == row - 1 || j == col - 1)
                 {
-                    testMap[i, j] = 0;
+                    testMap[i, j] = empty;
                     continue;
                 }
                 
@@ -45,6 +45,8 @@ public class MapController : MonoBehaviour
         }
         
         BuildMap();
+        
+        GetComponent<DrawLine>().CreateLine();
     }
     
     // 洗牌

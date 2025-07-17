@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 346651980}
   - component: {fileID: 346651981}
   - component: {fileID: 346651982}
+  - component: {fileID: 346651983}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -165,8 +166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 1521841893708114, guid: a2e4a6d9052b7de4bafdb6624dc22331, type: 3}
-  rowNum: 14
-  colNum: 18
   tiles:
   - {fileID: 21300000, guid: ef89ae41d6124cb41b5030a751cc8955, type: 3}
   - {fileID: 21300000, guid: b6e9a535aca2c0540a218f5afa201123, type: 3}
@@ -200,6 +199,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 003015499cb5fe04ea8aef363af2fa7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &346651983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 346651979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b74bf4c97c727c4eb4c2365bc1ab53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &519420028
@@ -308,7 +319,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5.2
+  orthographic size: 5.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

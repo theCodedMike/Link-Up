@@ -1,18 +1,19 @@
 using System.Collections;
-using System.Reflection;
 using UnityEngine;
 
 public class Link : MonoBehaviour
 {
     private Tile _tile1, _tile2; // 第1、2次点选的icon
-    
     private bool _select;
     private Camera _mainCamera;
-    private int _linkType;
+    private int _linkType; // 一折(0)、二折(1)或三折(2)
+    private DrawLine _drawLine;
+    private Vector3 _z1, _z2; // 折点位置
 
     private void Start()
     {
         _mainCamera = Camera.main;
+        _drawLine = GetComponent<DrawLine>();
     }
 
     private void Update()
@@ -63,7 +64,7 @@ public class Link : MonoBehaviour
             _tile2 = null;
         }
     }
-
+    
     private bool IsLink(int x1, int y1, int x2, int y2)
     {
         if (x1 == x2)
@@ -104,9 +105,10 @@ public class Link : MonoBehaviour
     // 消除牌
     private IEnumerator DestroyTile(int x1, int y1, int x2, int y2)
     {
+        _drawLine.DrawLinkLine(_tile1.gameObject, _tile2.gameObject, _linkType, _z1, _z2);
         yield return new WaitForSeconds(0.2f);
-        MapController.testMap[x1, y1] = 0;
-        MapController.testMap[x2, y2] = 0;
+        MapController.testMap[x1, y1] = MapController.empty;
+        MapController.testMap[x2, y2] = MapController.empty;
         Destroy(_tile1.gameObject);
         Destroy(_tile2.gameObject);
         _tile1 = null;
@@ -123,7 +125,7 @@ public class Link : MonoBehaviour
         {
             if (i == x2) //相邻
                 return true;
-            if (MapController.testMap[i, y] != 0)
+            if (MapController.testMap[i, y] != MapController.empty)
                 break;
         }
 
@@ -140,7 +142,7 @@ public class Link : MonoBehaviour
         {
             if (i == y2) // 相邻
                 return true;
-            if (MapController.testMap[x, i] != 0)
+            if (MapController.testMap[x, i] != MapController.empty)
                 break;
         }
         
@@ -154,16 +156,22 @@ public class Link : MonoBehaviour
     // 一折检测
     private bool OneCornerLink(int x1, int y1, int x2, int y2)
     {
-        if (MapController.testMap[x1, y2] == 0)
+        if (MapController.testMap[x1, y2] == MapController.empty)
         {
             if (XLink(y1, y2, x1) && YLink(x1, x2, y2))
+            {
+                _z1 = new Vector3(y2 * MapController.yMove, x1 * MapController.xMove, -1);
                 return true;
+            }
         }
 
-        if (MapController.testMap[x2, y1] == 0)
+        if (MapController.testMap[x2, y1] == MapController.empty)
         {
             if (XLink(y1, y2, x2) && YLink(x1, x2, y1))
+            {
+                _z1 = new Vector3(y1 * MapController.yMove, x2 * MapController.xMove, -1);
                 return true;
+            }
         }
 
         return false;
@@ -181,36 +189,48 @@ public class Link : MonoBehaviour
         // 右探
         for (int i = y1 + 1; i <= MapController.colNum + 1; i++)
         {
-            if (MapController.testMap[x1, i] == 0 && OneCornerLink(x1, i, x2, y2))
+            if (MapController.testMap[x1, i] == MapController.empty && OneCornerLink(x1, i, x2, y2))
+            {
+                _z2 = new Vector3(i * MapController.yMove, x1 * MapController.xMove, -1);
                 return true;
-            if (MapController.testMap[x1, i] != 0)
+            }
+            if (MapController.testMap[x1, i] != MapController.empty)
                 break;
         }
         
         // 左探
         for (int i = y1 - 1; i > -1; i--)
         {
-            if (MapController.testMap[x1, i] == 0 && OneCornerLink(x1, i, x2, y2))
+            if (MapController.testMap[x1, i] == MapController.empty && OneCornerLink(x1, i, x2, y2))
+            {
+                _z2 = new Vector3(i * MapController.yMove, x1 * MapController.xMove, -1);
                 return true;
-            if (MapController.testMap[x1, i] != 0)
+            }
+            if (MapController.testMap[x1, i] != MapController.empty)
                 break;
         }
         
         // 下探
         for (int i = x1 + 1; i <= MapController.rowNum + 1; i++)
         {
-            if (MapController.testMap[i, y1] == 0 && OneCornerLink(i, y1, x2, y2))
+            if (MapController.testMap[i, y1] == MapController.empty && OneCornerLink(i, y1, x2, y2))
+            {
+                _z2 = new Vector3(y1 * MapController.yMove, i * MapController.xMove, -1);
                 return true;
-            if (MapController.testMap[i, y1] != 0)
+            }
+            if (MapController.testMap[i, y1] != MapController.empty)
                 break;
         }
 
         // 上探
         for (int i = x1 - 1; i > -1; i--)
         {
-            if (MapController.testMap[i, y1] == 0 && OneCornerLink(i, y1, x2, y2))
+            if (MapController.testMap[i, y1] == MapController.empty && OneCornerLink(i, y1, x2, y2))
+            {
+                _z2 = new Vector3(y1 * MapController.yMove, i * MapController.xMove, -1);
                 return true;
-            if (MapController.testMap[i, y1] != 0)
+            }
+            if (MapController.testMap[i, y1] != MapController.empty)
                 break;
         }
         
